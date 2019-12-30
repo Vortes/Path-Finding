@@ -4,7 +4,7 @@ closedList = []
 
 class Cell:
     """Makes the cell, based Formula: f(n) = g(n) + h(n) for A* search"""
-    def __init__(self, f, g, h):
+    def __init__(self, f=0, g=0, h=0):
         self.f = f
         self.g = g
         self.h = h
@@ -36,17 +36,36 @@ class Grid:
             for j in range(self.column):
                 print(self.grid[i][j], end=' ')
 
+    def get_row(self):
+        return self.row
 
-def initCell(grid, row, column):
+    def get_column(self):
+        return self.column
+
+
+def initCell(game_board, row, column):
     for i in range(row):
         for j in range(column):
-            grid[i][j] = Cell() #TODO: find a way to init this with the cell class
+            if i == 0 and j == 0:
+                game_board[0][0] = 0
+            else:
+                game_board[i][j] = Cell()
+
+    return game_board
 
 
 def main():
-    game_board = Grid(5, 5)
-    game_board.make_grid()
-    game_board.get_grid()
+    grid = Grid(5, 5)
+    game_board = grid.make_grid()
+    game_board = initCell(game_board, grid.get_row(), grid.get_column())
+    start = game_board[0][0]
+    end = game_board[-1][-1]
+
+    openList.append(start)
+
+    # Start the A* Search Loop!
+    while openList:
+
 
 
 main()
