@@ -1,42 +1,60 @@
-import pygame
-pygame.init()
-pygame.display.set_caption('A Star Pathfinding')
-
-SCREEN = pygame.display.set_mode((255, 255))
-CLOCK = pygame.time.Clock()
+openList = []
+closedList = []
 
 
-WIDTH, HEIGHT = 20, 20
-MARGIN = 5
-BLACK = (0, 0, 0)
-WHITE = (255, 255, 255)
-SCREEN.fill(BLACK)
+class Cell:
+    """Makes the cell, based Formula: f(n) = g(n) + h(n) for A* search"""
+    def __init__(self, f, g, h):
+        self.f = f
+        self.g = g
+        self.h = h
 
 
-def create_board():
-    for column in range(0, 255, WIDTH + MARGIN):
-        for row in range(0, 255, HEIGHT + MARGIN):
-            pygame.draw.rect(SCREEN, WHITE, (column + MARGIN, row + MARGIN, WIDTH, HEIGHT))
+class Grid:
+    """Makes the game board
 
-
-def create_grids():
+    Attributes:
+        make_grid -- A 2D array with rows and columns specified by user
+        get_grid -- Returns the 2D array with formatting
+    """
     grid = []
-    for row in range(10):
-        grid.append([])
-        for column in range(10):
-            grid[row].append(0)
-    return grid
 
-grid = create_grids()
-print(grid)
+    def __init__(self, row, column):
+        self.row = row
+        self.column = column
 
-RUNNING = True
-while RUNNING:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            RUNNING = False
+    def make_grid(self):
+        for i in range(self.row):
+            self.grid.append([])
+            for j in range(self.column):
+                self.grid[i].append(0)
+        return self.grid
 
-    create_board()
-    pygame.display.update()
- 
-pygame.quit()
+    def get_grid(self):
+        for i in range(self.row):
+            print()
+            for j in range(self.column):
+                print(self.grid[i][j], end=' ')
+
+
+def initCell(grid, row, column):
+    for i in range(row):
+        for j in range(column):
+            grid[i][j] = Cell() #TODO: find a way to init this with the cell class
+
+
+def main():
+    game_board = Grid(5, 5)
+    game_board.make_grid()
+    game_board.get_grid()
+
+
+main()
+
+
+
+
+
+
+
+
