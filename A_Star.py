@@ -16,10 +16,19 @@ def aStar(maze, start, end):
     open_list = []
     closed_list = []
 
-    open_list.append((start_node))
+    open_list.append(start_node)
 
     while open_list:
-        pass
+        current_node = open_list[0]
+        current_index = 0
+
+        for index, open_node in enumerate(open_list):
+            if open_node.f < current_node.f:
+                current_node = open_node
+                current_index = index
+
+        closed_list.append(current_node)
+        open_list.pop(current_index)
 
 
 def main():
@@ -37,8 +46,8 @@ def main():
     # Start the A* Search Loop!
 
 
-
-main()
+if __name__ == '__main__':
+    main()
 
 
 
