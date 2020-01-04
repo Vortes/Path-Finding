@@ -30,6 +30,18 @@ def aStar(maze, start, end):
         closed_list.append(current_node)
         open_list.pop(current_index)
 
+        """
+                 (-1,0)
+                    N
+        (1,0) NW    |     NE (-1,1)
+                    |
+   (0,-1) W - - - - | - - - - E (0,1)
+                    |   
+       (1,-1) SW    |     SE (1,1)    
+                    S 
+                  (1,0)
+        """
+
 
 def main():
     maze = [[0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
