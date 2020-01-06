@@ -26,6 +26,7 @@ def astar(maze, start, end):
         current_index = 0
 
         for index, open_node in enumerate(open_list):
+            print(current_node.f)
             if open_node.f < current_node.f:
                 current_node = open_node
                 current_index = index
@@ -81,8 +82,8 @@ def astar(maze, start, end):
                 if child == closed_nodes:
                     continue
 
-            child.g = current_node.g + 10
-            child.h = abs(current_node.position[0] - end_node.position[0]) +abs(current_node.position[1] - end_node.position[1])
+            child.g = current_node.g + 1
+            child.h = ((child.position[0] - end_node.position[0]) ** 2) + ((child.position[1] - end_node.position[1]) ** 2)
             child.f = child.g + child.h
 
             for open_node in open_list:
