@@ -1,3 +1,4 @@
+import math
 class Node:
     """Makes the cell, based on Formula: f(n) = g(n) + h(n) for A* search"""
     def __init__(self, parent=None, position=None):
@@ -9,9 +10,11 @@ class Node:
         self.h = 0
 
 
-def aStar(maze, start, end):
+def astar(maze, start, end):
     start_node = Node(None, start)
+    start_node.g = start_node.h = start_node.f = 0
     end_node = Node(None, start)
+    end_node.g = end_node.h = end_node.f = 0
 
     open_list = []
     closed_list = []
@@ -30,17 +33,63 @@ def aStar(maze, start, end):
         closed_list.append(current_node)
         open_list.pop(current_index)
 
+        # Found the goal
+        print(current_node)
+        if current_node == end_node:
+            path = []
+            current = current_node
+            while current is not None:
+                path.append(current.position)
+                current = current.parent
+            return path[::-1]
+
+        children = []
+
         """
-                 (-1,0)
-                    N
-        (1,0) NW    |     NE (-1,1)
-                    |
-   (0,-1) W - - - - | - - - - E (0,1)
-                    |   
-       (1,-1) SW    |     SE (1,1)    
-                    S 
-                  (1,0)
+                     (-1,0)
+                        N
+            (1,0) NW    |     NE (-1,1)
+                        |
+       (0,-1) W - - - - | - - - - E (0,1)
+                        |   
+           (1,-1) SW    |     SE (1,1)    
+                        S 
+                      (1,0)
         """
+
+        adjacent_squares = [(-1, 0), (-1, 1), (0, 1), (1, 1), (1, 0), (1, -1), (0, -1), (1, 0)]
+
+        for pos in range(len(adjacent_squares)):
+            node_coord = (current_node.position[1] + adjacent_squares[pos][1],  # x
+                          current_node.position[0] + adjacent_squares[pos][0])  # y
+
+            x_less_than_zero = node_coord[1] < 0
+            y_less_than_zero = node_coord[0] < 0
+            x_bigger_than_maze = node_coord[1] > len(maze[pos]) - 1
+            y_bigger_than_maze = node_coord[0] > len(maze) - 1
+
+            if x_less_than_zero or y_less_than_zero or x_bigger_than_maze or y_bigger_than_maze:
+                continue
+            if maze[node_coord[0]][node_coord[1]] == 1:
+                continue
+
+            compatible_node = Node(current_node, node_coord)
+            children.append(compatible_node)
+
+        for child in children:
+            for closed_nodes in closed_list:
+                if child == closed_nodes:
+                    continue
+
+            child.g = current_node.g + 10
+            child.h = abs(current_node.position[0] - end_node.position[0]) +abs(current_node.position[1] - end_node.position[1])
+            child.f = child.g + child.h
+
+            for open_node in open_list:
+                if child == open_node and child.g > open_node.g:
+                    continue
+
+            open_list.append(child)
 
 
 def main():
@@ -55,7 +104,11 @@ def main():
             [0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]]
 
-    # Start the A* Search Loop!
+    start = (0, 0)
+    end = (7, 6)
+
+    path = astar(maze, start, end)
+    print(path)
 
 
 if __name__ == '__main__':
